@@ -1,39 +1,10 @@
+const app = require("./app.js");
+const http = require('http');
+const logger = require("./utils/logger");
+const config = require("./utils/config");
 
-const express = require('express')
-const app = express()
-const cors = require('cors')
-const mongoose = require('mongoose')
-const Blog = require('./models/blog');
-const PORT = 3003;
+const server = http.createServer(app);
 
-const mongoURL = process.env.mongoURL;
-
-mongoose.connect(mongoURL);
-
-app.use(cors())
-app.use(express.json())
-
-app.get('/', (request, response) => {
-  response.redirect("/api/blogs");
-})
-app.get('/api/blogs', (request, response) => {
-  Blog
-    .find({})
-    .then(blogs => {
-      response.json(blogs)
-    })
-})
-
-app.post('/api/blogs', (request, response) => {
-  const blog = new Blog(request.body)
-  
-  blog
-    .save()
-    .then(result => {
-      response.status(201).json(result)
-    })
-})
-
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`)
+server.listen(config.PORT, () => {
+  logger.info(`Server running on port: ${config.PORT}`)
 })
