@@ -1,4 +1,4 @@
-run="npx nodemon index.js && cd frontend && npm run dev"
+run="npx nodemon index.js"
 
 [packager]
 language = "nodejs"
