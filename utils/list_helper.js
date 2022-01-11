@@ -1,38 +1,43 @@
+const blogLIST = require("../tests/testingBlogList").blogs;
+
+
 const dummy = (blogs) => {
   return 1;
 }
-const blogLIST = [
-  {
-    _id: '5a422aa71b54a676234d17f8',
-    title: 'Go To Statement Considered Harmful',
-    author: 'Edsger W. Dijkstra',
-    url: 'http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html',
-    likes: 5,
-    __v: 0
-  },
-  {
-    _id: '5a422aa71b54a676234d17f9',
-    title: 'Go To Statement Considered Harmful',
-    author: 'Edsger W. Dijkstra',
-    url: 'http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html',
-    likes: 10,
-    __v: 0
-  }
-]
+
 const totalLikes = (blogs) => {
-  
   if (blogs.length === 1) {
     return blogs[0].likes;
   } else {
-    return blogs.reduce((prev, curr) => {
-      return prev.likes + curr.likes;
+    return blogs.reduce((sum, currBlog, currIndex) => {
+      if (currIndex === 1 ) {
+        //first time, sum will be blogs[0], an object.
+        const prevBlog = sum;
+        return prevBlog.likes + currBlog.likes;
+      }
+      //second time onwards, sum will be the total likes up until current index
+      return sum + currBlog.likes;
     })
   }
-
-  
 }
+const favoriteBlog = (blogs) => {
+  let maxLikes = 0;
+  let mostLikedBlog = {}
+  blogs.forEach((blog, index) => {
+    if (blog.likes > maxLikes) {
+      maxLikes = blog.likes
+      mostLikedBlog.title = blog.title;
+      mostLikedBlog.author = blog.author;
+      mostLikedBlog.likes = blog.likes
+    }
+  })
+  return mostLikedBlog;
+}
+
 console.log(totalLikes(blogLIST));
+
 module.exports = {
   dummy,
-  totalLikes
+  totalLikes,
+  favoriteBlog
 }
