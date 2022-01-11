@@ -1,6 +1,6 @@
 const blogLIST = require("../tests/testingBlogList").blogs;
-
-
+const collection = require("lodash/fp/collection");
+const _ = require("lodash");
 const dummy = (blogs) => {
   return 1;
 }
@@ -34,30 +34,40 @@ const favoriteBlog = (blogs) => {
   return mostLikedBlog;
 }
 const mostBlogs = (blogs) => {
-  //TODO implement LODASH
-
-  let authors = {}
-  let authorMostBlog = {
-    author: "",
-    blogs: 0
-  };
-  blogs.forEach((currBlog, currIndex) => {
-    if (!authors[currBlog.author] && authors[currBlog.author] !== 0) {
-      authors[currBlog.author] = 1
-    } else {
-      authors[currBlog.author] += 1
-    }
-  })
-  for (let author in authors) {
-    if (authors[author] > authorMostBlog.blogs) {
-      authorMostBlog.author = author;
-      authorMostBlog.blogs = authors[author];
-    }
+  //USING LODASH
+  const authorsArr = _.map(blogs, 'author');
+  const mostRepeatedAuthor = _.head(_(authorsArr)
+    .countBy()
+    .entries()
+    .maxBy(_.last));
+  const authorBlogs = _.filter(blogs, { author: mostRepeatedAuthor });
+  return {
+    author: mostRepeatedAuthor,
+    blogs: authorBlogs.length
   }
-  return authorMostBlog;
-  
+
+  // VANILLA JS
+  // let authors = {}
+  // let authorMostBlog = {
+  //   author: "",
+  //   blogs: 0
+  // };
+  // blogs.forEach((currBlog, currIndex) => {
+  //   if (!authors[currBlog.author] && authors[currBlog.author] !== 0) {
+  //     authors[currBlog.author] = 1
+  //   } else {
+  //     authors[currBlog.author] += 1
+  //   }
+  // })
+  // for (let author in authors) {
+  //   if (authors[author] > authorMostBlog.blogs) {
+  //     authorMostBlog.author = author;
+  //     authorMostBlog.blogs = authors[author];
+  //   }
+  // }
+  // return authorMostBlog;
 }
-console.log(mostBlogs(blogLIST));
+// console.log(mostBlogs(blogLIST));
 
 module.exports = {
   dummy,
