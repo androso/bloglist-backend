@@ -57,7 +57,7 @@ const mostBlogs = (blogs) => {
   return authorMostBlog;
   
 }
-// console.log(mostBlogs(blogLIST));
+console.log(mostBlogs(blogLIST));
 
 module.exports = {
   dummy,

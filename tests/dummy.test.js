@@ -2,6 +2,16 @@ const listHelper = require("../utils/list_helper");
 const blogLIST = require("./testingBlogList").blogs;
 const mostLikedBlog = require("./testingBlogList").mostLikedBlog;
 
+const oneBlog = [
+  {
+    _id: '8e422aa71b54a676234d17g8',
+    title: 'Go To Statement Considered benign',
+    author: 'Edsger W. Dijkstra',
+    url: 'http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html',
+    likes: 20,
+    __v: 0
+  }
+]
 
 describe('dummy', () => {
   test('returns one', () => {
@@ -12,16 +22,6 @@ describe('dummy', () => {
 })
 
 describe('total likes', () => {
-  const oneBlog = [
-    {
-      _id: '8e422aa71b54a676234d17g8',
-      title: 'Go To Statement Considered benign',
-      author: 'Edsger W. Dijkstra',
-      url: 'http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html',
-      likes: 20,
-      __v: 0
-    }
-  ]
 
   test("when there's only one blog, total equals its likes", () => {
     const result = listHelper.totalLikes(oneBlog);
@@ -41,9 +41,18 @@ describe("favorite blog", () => {
 })
 
 describe("Author with the most blogs", () => {
-  //TODO Find more corner cases
-  test.only("When there's multiple author", () => {
+  test("When there's multiple author", () => {
     const result = listHelper.mostBlogs(blogLIST);
-    expect(result).toEqual({ author: 'Robert C. Martin', blogs: 3})
+    expect(result).toEqual({ author: 'Edsger W. Dijkstra', blogs: 3 })
+  })
+
+  test("when there's only one blog, it returns that author and that blog", () => {
+    const result = listHelper.mostBlogs(oneBlog);
+    expect(result).toEqual({author: 'Edsger W. Dijkstra', blogs: 1})
+  })
+  
+  test("when there's multiple authors with same amount of blogs, returns the first one", () => {
+    const result = listHelper.mostBlogs(blogLIST);
+    expect(result).toEqual({ author: 'Edsger W. Dijkstra', blogs: 3 })
   })
 })
