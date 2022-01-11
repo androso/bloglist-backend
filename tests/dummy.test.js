@@ -1,7 +1,7 @@
 const listHelper = require("../utils/list_helper");
 const blogLIST = require("./testingBlogList").blogs;
 const mostLikedBlog = require("./testingBlogList").mostLikedBlog;
-
+const mostLikedAuthor = require("./testingBlogList").mostLikedAuthor;
 const oneBlog = [
   {
     _id: '8e422aa71b54a676234d17g8',
@@ -54,5 +54,12 @@ describe("Author with the most blogs", () => {
   test("when there's multiple authors with same amount of blogs, returns the first one", () => {
     const result = listHelper.mostBlogs(blogLIST);
     expect(result).toEqual({ author: 'Edsger W. Dijkstra', blogs: 3 })
+  })
+})
+
+describe("Most liked author", () => {
+  test("when multiple blogs", () => {
+    const result = listHelper.mostLiked(blogLIST);
+    expect(result).toEqual(mostLikedAuthor)
   })
 })

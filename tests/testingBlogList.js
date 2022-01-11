@@ -54,7 +54,12 @@ const mostLikedBlog = {
   author: "Edsger W. Dijkstra",
   likes: 12,
 }
+const mostLikedAuthor = {
+  author: "Edsger W. Dijkstra",
+  likes: 24
+}
 module.exports = {
   blogs,
-  mostLikedBlog
+  mostLikedBlog,
+  mostLikedAuthor
 };
