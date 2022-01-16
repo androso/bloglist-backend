@@ -4,7 +4,9 @@
   "description": "This template provides an easy way to use NodeJS v16 on Replit! As of writing, NodeJS repls have Node v12, which is several years out of date.",
   "main": "index.js",
   "scripts": {
-    "test": "jest --verbose"
+    "start": "cross-env NODE_ENV=production node index.js",
+    "dev": "cross-env NODE_ENV=development npx nodemon index.js",
+    "test": "cross-env NODE_ENV=test jest --verbose --runInBand"
   },
   "keywords": [],
   "author": "",
@@ -14,9 +16,11 @@
     "express": "^4.17.2",
     "lodash": "^4.17.21",
     "mongoose": "^6.1.5",
-    "nodemon": "^2.0.15"
+    "nodemon": "^2.0.15",
+    "supertest": "^6.2.1"
   },
   "devDependencies": {
+    "cross-env": "^7.0.3",
     "jest": "^27.4.7"
   }
 }

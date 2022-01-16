@@ -68,21 +68,30 @@ const mostBlogs = (blogs) => {
   // return authorMostBlog;
 }
 // console.log(mostBlogs(blogLIST));
+
 const mostLiked = (blogs) => {
-  let authors = {}
-  blogs.forEach((currBlog, currIndex) => {
-    if (!authors[currBlog.author]) {
-      authors[currBlog.author] = {likes: currBlog.likes}
-    } else {
-      authors[currBlog.author].likes += currBlog.likes
+  if (blogs.length === 1) {
+    return {
+      author: blogs[0].author,
+      likes: blogs[0].likes
     }
-  })
-  const mostLikes = _.map(authors, (author) => author.likes).sort().reverse()[0];
-  const mostLikedAuthor = _.findKey(authors, {likes: mostLikes});
-  return {
-    author: mostLikedAuthor,
-    likes: mostLikes
+  } else {
+    let authors = {}
+    blogs.forEach((currBlog, currIndex) => {
+      if (!authors[currBlog.author]) {
+        authors[currBlog.author] = { likes: currBlog.likes }
+      } else {
+        authors[currBlog.author].likes += currBlog.likes
+      }
+    })
+    const mostLikes = _.map(authors, (author) => author.likes).sort().reverse()[0];
+    const mostLikedAuthor = _.findKey(authors, { likes: mostLikes });
+    return {
+      author: mostLikedAuthor,
+      likes: mostLikes
+    }
   }
+
 }
 
 

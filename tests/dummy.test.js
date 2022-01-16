@@ -2,6 +2,9 @@ const listHelper = require("../utils/list_helper");
 const blogLIST = require("./testingBlogList").blogs;
 const mostLikedBlog = require("./testingBlogList").mostLikedBlog;
 const mostLikedAuthor = require("./testingBlogList").mostLikedAuthor;
+const supertest = require("supertest");
+
+
 const oneBlog = [
   {
     _id: '8e422aa71b54a676234d17g8',
@@ -61,5 +64,9 @@ describe("Most liked author", () => {
   test("when multiple blogs", () => {
     const result = listHelper.mostLiked(blogLIST);
     expect(result).toEqual(mostLikedAuthor)
+  })
+  test("when only one blog in the array", () => {
+    const result = listHelper.mostLiked([blogLIST[0]]);
+    expect(result).toEqual({author: blogLIST[0].author, likes: blogLIST[0].likes});
   })
 })
