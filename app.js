@@ -1,3 +1,4 @@
+require("express-async-errors");
 const express = require('express');
 const app = express();
 const cors = require('cors');
@@ -9,7 +10,7 @@ const middleware = require("./utils/middleware");
 
 logger.info("Connecting to database");
 
-mongoose.connect(config.MONGODB_URI)
+mongoose.connect("mongodb+srv://androso:JihyoMina@cluster0.42hyt.mongodb.net/bloglist-test?retryWrites=true&w=majority")
   .then(_ => {
     logger.info("Connected to MongoDB!");
   })
