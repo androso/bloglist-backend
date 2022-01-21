@@ -15,11 +15,10 @@ beforeEach(async () => {
 })
 
 describe("api testing", () => {
-  test("returns right amount of blogs in JSON", () => {
-    let i = 0;
-    expect(i).toBe(0);
-    // const response = await api.get("/api/blogs");
-    // expect(response.body.length).toBe(0);
+  test("returns right amount of blogs in JSON", async () => {
+    const response = await api.get("/api/blogs").expect(200).expect('Content-Type', /application\/json/);
+    expect(response.body.length).toBe(3);
+    
   })
 }, 10000)
 

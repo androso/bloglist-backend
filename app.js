@@ -10,6 +10,7 @@ const middleware = require("./utils/middleware");
 
 logger.info("Connecting to database");
 
+
 mongoose.connect(config.MONGODB_URI)
   .then(() => {
     logger.info("Connected to MongoDB!");
@@ -18,16 +19,10 @@ mongoose.connect(config.MONGODB_URI)
     logger.error(`error connecting to MongoDB: ${error.message}`);
   });
 
-// try {
-// 	await mongoose.connect(config.MONGODB_URI, {
-// 		useNewUrlParser: true,
-// 		useUnifiedTopology: true,
-// 	});
-// 	logger.info("connected to MongoDB");
-// } catch (error) {
-// 	logger.error("error connection to MongoDB:", error.message);
-// }
-
+app.get('/', (req, res) => {
+  res.send("<h1>Welcome to my Api!!</h1>")
+})
+  
 app.use(cors());
 app.use(express.json());
 app.use(middleware.requestLogger);
