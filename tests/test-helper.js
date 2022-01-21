@@ -21,4 +21,6 @@ const initialBlogs = [
   }
 ]
 
-module.exports = initialBlogs;
+module.exports = {
+  initialBlogs
+};
