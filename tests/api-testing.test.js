@@ -26,22 +26,25 @@ describe("api testing", () => {
     expect(aBlog.id).toBeDefined();
   });
 
-  test.only("succesfully posting to api", async () => {
+  test("succesfully posting to api", async () => {
+    const blogsInDBBefore = await (await api.get("/api/blogs")).body;
     const blogToSave = {
       title: "Canonical string reduction",
       author: "Edsger W. Dijkstra",
       url: "http://www.cs.utexas.edu/~EWD/transcriptions/EWD08xx/EWD808.html",
       likes: 23
     }
-    
-    const savedBlog = await api.post(blogToSave);
-    const blogsInDB = await (await api.get("/api/blogs")).body;
-    console.log(blogsInDB);
+    await api.post("/api/blogs").send(blogToSave);
+    const blogsInDBAfter = await (await api.get("/api/blogs")).body;
 
+
+    const savedBlog = await Blog.findOne({title: blogToSave.title});
+    
+    expect(savedBlog.title).toEqual(blogToSave.title);
+    expect(blogsInDBAfter.length).toBe(blogsInDBBefore.length + 1);
   })
 })
 
 afterAll(() => {
-  console.log("done");
   mongoose.connection.close();
 })
