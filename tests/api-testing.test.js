@@ -18,9 +18,15 @@ describe("api testing", () => {
   test("returns right amount of blogs in JSON", async () => {
     const response = await api.get("/api/blogs").expect(200).expect('Content-Type', /application\/json/);
     expect(response.body.length).toBe(3);
-    
+  });
+
+  test('_id is changed for id in each blog', async () => {
+    const response = await api.get("/api/blogs");
+    const aBlog = response.body[0];
+
+    expect(aBlog.id).toBeDefined();
   })
-}, 10000)
+})
 
 afterAll(() => {
   console.log("done");
