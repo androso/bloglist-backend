@@ -43,6 +43,17 @@ describe("api testing", () => {
     expect(savedBlog.title).toEqual(blogToSave.title);
     expect(blogsInDBAfter.length).toBe(blogsInDBBefore.length + 1);
   })
+
+  test("if likes is not provided, it defaults to 0", async () => {
+    const blogToSave = {
+      title: "Song of the sisters",
+      author: "Hans Zimmer",
+      url: "http://www.sisterhood.com"
+    }
+    await api.post("/api/blogs").send(blogToSave);
+    const savedBlog = await Blog.findOne({title: blogToSave.title});
+    expect(savedBlog.likes).toBe(0);
+  })
 })
 
 afterAll(() => {
