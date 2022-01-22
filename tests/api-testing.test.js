@@ -38,8 +38,8 @@ describe("api testing", () => {
     const blogsInDBAfter = await (await api.get("/api/blogs")).body;
 
 
-    const savedBlog = await Blog.findOne({title: blogToSave.title});
-    
+    const savedBlog = await Blog.findOne({ title: blogToSave.title });
+
     expect(savedBlog.title).toEqual(blogToSave.title);
     expect(blogsInDBAfter.length).toBe(blogsInDBBefore.length + 1);
   })
@@ -51,10 +51,33 @@ describe("api testing", () => {
       url: "http://www.sisterhood.com"
     }
     await api.post("/api/blogs").send(blogToSave);
-    const savedBlog = await Blog.findOne({title: blogToSave.title});
+    const savedBlog = await Blog.findOne({ title: blogToSave.title });
     expect(savedBlog.likes).toBe(0);
-  })
+  });
+
+  test.only("if title and url not provided it returns bad request", async () => {
+    const blogToSave = {
+      author: "Hans Zimmer",
+      likes: 20
+    }
+    await api.post("/api/blogs").send(blogToSave).expect(400);
+  });
+  
 })
+
+describe("deletion of a note", () => {
+  test.only("success with 204 if it's valid", async () => {
+      const previousBlogs = await testUtils.blogsInDB();
+      const blogToDelete = previousBlogs[0];
+      await api.delete(`/api/blogs/${blogToDelete.id}`).expect(204);
+
+      const currentBlogs = await testUtils.blogsInDB(); 
+      const currentIDs = currentBlogs.map(blog => blog.id);
+
+      expect(currentBlogs.length).toBe(previousBlogs.length - 1);
+      expect(currentIDs).not.toContain(blogToDelete.id);
+  })
+}, 10000)
 
 afterAll(() => {
   mongoose.connection.close();

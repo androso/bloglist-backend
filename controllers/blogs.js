@@ -12,4 +12,11 @@ blogsRouter.route("/")
     response.status(201).json(savedBlog.toJSON);
   })
 
+blogsRouter.route("/:id")
+  .delete(async (request, response) => {
+    const noteID = request.params.id;
+    const res = await Blog.findByIdAndDelete(noteID);
+    response.status(204).end()
+  })
+
 module.exports = blogsRouter;
