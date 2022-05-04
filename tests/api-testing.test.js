@@ -14,12 +14,14 @@ beforeEach(async () => {
   }
 })
 
-describe("api testing", () => {
+describe("Getting blogs", () => {
   test("returns right amount of blogs in JSON", async () => {
     const response = await api.get("/api/blogs").expect(200).expect('Content-Type', /application\/json/);
     expect(response.body.length).toBe(3);
-  });
+  }); 
+})
 
+describe("posting a blog", () => {
   test('_id is changed for id in each blog', async () => {
     const response = await api.get("/api/blogs");
     const aBlog = response.body[0];
@@ -36,7 +38,6 @@ describe("api testing", () => {
     }
     await api.post("/api/blogs").send(blogToSave);
     const blogsInDBAfter = await (await api.get("/api/blogs")).body;
-
 
     const savedBlog = await Blog.findOne({ title: blogToSave.title });
 
@@ -55,30 +56,40 @@ describe("api testing", () => {
     expect(savedBlog.likes).toBe(0);
   });
 
-  test.only("if title and url not provided it returns bad request", async () => {
+  test("if title and url not provided it returns bad request", async () => {
     const blogToSave = {
       author: "Hans Zimmer",
       likes: 20
     }
     await api.post("/api/blogs").send(blogToSave).expect(400);
   });
-  
+
 })
 
-describe("deletion of a note", () => {
-  test.only("success with 204 if it's valid", async () => {
-      const previousBlogs = await testUtils.blogsInDB();
-      const blogToDelete = previousBlogs[0];
-      await api.delete(`/api/blogs/${blogToDelete.id}`).expect(204);
+describe("deletion of a blog", () => {
+  test("success with 204 if it's valid", async () => {
+    const previousBlogs = await testUtils.blogsInDB();
+    const blogToDelete = previousBlogs[0];
+    await api.delete(`/api/blogs/${blogToDelete.id}`).expect(204);
 
-      const currentBlogs = await testUtils.blogsInDB(); 
-      const currentIDs = currentBlogs.map(blog => blog.id);
+    const currentBlogs = await testUtils.blogsInDB();
+    const currentIDs = currentBlogs.map(blog => blog.id);
 
-      expect(currentBlogs.length).toBe(previousBlogs.length - 1);
-      expect(currentIDs).not.toContain(blogToDelete.id);
-  })
+    expect(currentBlogs.length).toBe(previousBlogs.length - 1);
+    expect(currentIDs).not.toContain(blogToDelete.id);
+  }) 
 }, 10000)
 
+describe("updating a blog", () => {
+  test("success with HTTP 200 when provided with valid id", async () => {
+    const blogToUpdate = await (await testUtils.blogsInDB())[0];
+    await api.put(`/api/blogs/${blogToUpdate.id}`).send({likes: 20}).expect(200);
+    const blogAfter = await (await api.get(`/api/blogs/${blogToUpdate.id}`)).body;
+
+    expect(blogAfter.likes).toEqual(20);
+  });
+
+})
 afterAll(() => {
   mongoose.connection.close();
 })
