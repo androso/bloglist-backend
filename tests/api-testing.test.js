@@ -13,16 +13,90 @@ beforeEach(async () => {
     await blogObject.save();
   }
 })
+<<<<<<< HEAD
+=======
 
-describe("api testing", () => {
-  test("returns right amount of blogs in JSON", () => {
-    let i = 0;
-    expect(i).toBe(0);
-    // const response = await api.get("/api/blogs");
-    // expect(response.body.length).toBe(0);
+describe("Getting blogs", () => {
+  test("returns right amount of blogs in JSON", async () => {
+    const response = await api.get("/api/blogs").expect(200).expect('Content-Type', /application\/json/);
+    expect(response.body.length).toBe(3);
+  }); 
+})
+
+describe("posting a blog", () => {
+  test('_id is changed for id in each blog', async () => {
+    const response = await api.get("/api/blogs");
+    const aBlog = response.body[0];
+    expect(aBlog.id).toBeDefined();
+  });
+>>>>>>> f9a475be9875556231b347991868b0bf95a04aea
+
+  test("succesfully posting to api", async () => {
+    const blogsInDBBefore = await (await api.get("/api/blogs")).body;
+    const blogToSave = {
+      title: "Canonical string reduction",
+      author: "Edsger W. Dijkstra",
+      url: "http://www.cs.utexas.edu/~EWD/transcriptions/EWD08xx/EWD808.html",
+      likes: 23
+    }
+    await api.post("/api/blogs").send(blogToSave);
+    const blogsInDBAfter = await (await api.get("/api/blogs")).body;
+
+    const savedBlog = await Blog.findOne({ title: blogToSave.title });
+
+    expect(savedBlog.title).toEqual(blogToSave.title);
+    expect(blogsInDBAfter.length).toBe(blogsInDBBefore.length + 1);
   })
+<<<<<<< HEAD
+}, 10000)
+=======
+
+  test("if likes is not provided, it defaults to 0", async () => {
+    const blogToSave = {
+      title: "Song of the sisters",
+      author: "Hans Zimmer",
+      url: "http://www.sisterhood.com"
+    }
+    await api.post("/api/blogs").send(blogToSave);
+    const savedBlog = await Blog.findOne({ title: blogToSave.title });
+    expect(savedBlog.likes).toBe(0);
+  });
+
+  test("if title and url not provided it returns bad request", async () => {
+    const blogToSave = {
+      author: "Hans Zimmer",
+      likes: 20
+    }
+    await api.post("/api/blogs").send(blogToSave).expect(400);
+  });
+
+})
+>>>>>>> f9a475be9875556231b347991868b0bf95a04aea
+
+describe("deletion of a blog", () => {
+  test("success with 204 if it's valid", async () => {
+    const previousBlogs = await testUtils.blogsInDB();
+    const blogToDelete = previousBlogs[0];
+    await api.delete(`/api/blogs/${blogToDelete.id}`).expect(204);
+
+    const currentBlogs = await testUtils.blogsInDB();
+    const currentIDs = currentBlogs.map(blog => blog.id);
+
+    expect(currentBlogs.length).toBe(previousBlogs.length - 1);
+    expect(currentIDs).not.toContain(blogToDelete.id);
+  }) 
 }, 10000)
 
+describe("updating a blog", () => {
+  test("success with HTTP 200 when provided with valid id", async () => {
+    const blogToUpdate = await (await testUtils.blogsInDB())[0];
+    await api.put(`/api/blogs/${blogToUpdate.id}`).send({likes: 20}).expect(200);
+    const blogAfter = await (await api.get(`/api/blogs/${blogToUpdate.id}`)).body;
+
+    expect(blogAfter.likes).toEqual(20);
+  });
+
+})
 afterAll(() => {
   console.log("done");
   mongoose.connection.close();

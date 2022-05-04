@@ -3,9 +3,9 @@
     "tests/testingBlogList.js": [
       {
         "id": "b3b0aad1-247f-4fc0-b4d5-24198afc90f6",
-        "line": 34,
-        "version": 129,
-        "index": 887
+        "line": 3,
+        "version": 345,
+        "index": 17
       }
     ],
     "utils/list_helper.js": [

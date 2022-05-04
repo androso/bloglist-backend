@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+=======
+
+>>>>>>> f9a475be9875556231b347991868b0bf95a04aea
 const blogs = [
 	{
 		_id: "5a422a851b54a676234d17f7",
@@ -58,8 +62,17 @@ const mostLikedAuthor = {
 	author: "Edsger W. Dijkstra",
 	likes: 24,
 };
+<<<<<<< HEAD
 module.exports = {
 	blogs,
 	mostLikedBlog,
 	mostLikedAuthor,
+=======
+
+
+module.exports = {
+	blogs,
+	mostLikedBlog,
+	mostLikedAuthor
+>>>>>>> f9a475be9875556231b347991868b0bf95a04aea
 };
